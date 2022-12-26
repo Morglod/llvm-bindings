@@ -1,4 +1,7 @@
 .idea/
+.vscode/
+
+.vscode/
 
 cmake-build-*/
 
@@ -11,3 +14,6 @@ docs/craft/
 package-lock.json
 
 test/temp/
+
+/**/**/.DS_Store
+cmake_install.cmake

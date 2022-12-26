@@ -63,4 +63,14 @@ private:
     Napi::Value getSubprogram(const Napi::CallbackInfo &info);
 
     Napi::Value getType(const Napi::CallbackInfo &info);
+
+    Napi::Value getCallingConv(const Napi::CallbackInfo &info);
+
+    void setCallingConv(const Napi::CallbackInfo &info);
+
+    void addFnAttr(const Napi::CallbackInfo &info);
+
+    void addParamAttr(const Napi::CallbackInfo &info);
+
+    void addRetAttr(const Napi::CallbackInfo &info);
 };

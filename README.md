@@ -8,16 +8,16 @@ LLVM bindings for Node.js/JavaScript/TypeScript
 
 ## Supported OS
 
-|  | x86_64 | ARM64 |
-| :---: | :---: | :---: |
-| macOS 10.15 Catalina | ✅ | / |
-| macOS 11 Big Sur | ✅ | ✅ |
-| macOS 12 Monterey | ✅ | ✅ |
-| Ubuntu 18.04 | ✅ | ✅ |
-| Ubuntu 20.04 | ✅ | ✅ |
-| Ubuntu 21.10 | ✅ | ✅ |
-| Windows 10 | ✅ | ⚠️ |
-| Windows 11 | ✅ | ⚠️ |
+|                      | x86_64 | ARM64 |
+|:--------------------:|:------:|:-----:|
+| macOS 10.15 Catalina |   ✅    |   /   |
+|   macOS 11 Big Sur   |   ✅    |   ✅   |
+|  macOS 12 Monterey   |   ✅    |   ✅   |
+|     Ubuntu 18.04     |   ✅    |   ✅   |
+|     Ubuntu 20.04     |   ✅    |   ✅   |
+|     Ubuntu 22.04     |   ✅    |   ✅   |
+|      Windows 10      |   ✅    |  ⚠️   |
+|      Windows 11      |   ✅    |  ⚠️   |
 
 > ⚠️ means not tested.
 
@@ -31,7 +31,7 @@ listed in the [TypeScript definition file](./llvm-bindings.d.ts).
 
 ```shell
 # install cmake and llvm by homebrew
-brew install cmake llvm
+brew install cmake llvm@14
 
 # install llvm-bindings by npm
 npm install llvm-bindings
@@ -43,7 +43,7 @@ npm install llvm-bindings
 #install llvm by installation script
 wget https://apt.llvm.org/llvm.sh
 sudo chmod +x llvm.sh
-sudo ./llvm.sh 13
+sudo ./llvm.sh 14
 
 # install cmake and zlib by apt-get
 sudo apt-get install cmake zlib1g-dev
@@ -54,7 +54,7 @@ npm install llvm-bindings
 
 ### Install on Windows
 
-First, please refer to [Build LLVM from sources on Windows 10](https://github.com/ApsarasX/llvm-bindings/wiki/Build-LLVM-from-source-code-on-Windows-10) to build LLVM.
+First, please refer to [Build LLVM from sources on Windows 10](https://github.com/ApsarasX/llvm-bindings/wiki/Build-LLVM-from-source-code-on-Windows-10) to build LLVM. An alternative is to download [prebuilt LLVM binary](https://github.com/ApsarasX/llvm-windows/releases).
 
 Then, find the `llvm-config` command in your LLVM build directory and execute `llvm-config --cmakedir` to get LLVM cmake directory, assuming `C:\Users\dev\llvm-13.0.1.src\build\lib\cmake\llvm`.
 
@@ -68,7 +68,7 @@ npm config set cmake_LLVM_DIR C:\Users\dev\llvm-13.0.1.src\build\lib\cmake\llvm
 npm install llvm-bindings
 ```
 
-> You can also install `llvm-bindings` in WSL2 if your OS is Windows.
+> Note: The build type of `llvm-bindings` must be consistent with LLVM, otherwise there will be many compilation errors when building `llvm-bindings`.
 
 ### Custom LLVM Installation
 You can use the npm configuration options to set the path to the LLVM cmake directory. This is needed if you don't want to use the system default LLVM installation.
@@ -124,11 +124,12 @@ Due to the limitation of `node-addon-api`, this project has not implemented inhe
 
 ## Compatibility
 
-| llvm-bindings versions  |  compatible LLVM versions |
-| ------------ | ------------ |
-|  0.0.x, 0.1.x |  11.0.x, 11.1.x |
-|  0.2.x        |  12.0.x         |
-|  0.3.x        |  13.0.x         |
+| llvm-bindings versions | compatible LLVM versions |
+|------------------------|--------------------------|
+| 0.0.x, 0.1.x           | 11.0.x, 11.1.x           |
+| 0.2.x                  | 12.0.x                   |
+| 0.3.x                  | 13.0.x                   |
+| 0.4.x                  | 14.0.x                   |
 
 ## Acknowledgments
 - [MichaReiser](https://github.com/MichaReiser): the creator of [llvm-node](https://github.com/MichaReiser/llvm-node)

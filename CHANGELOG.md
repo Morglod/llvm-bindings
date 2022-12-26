@@ -1,3 +1,54 @@
+## [0.4.2](https://github.com/ApsarasX/llvm-bindings/compare/v0.4.1...v0.4.2) (2022-08-01)
+
+
+### Bug Fixes
+
+* **Type:** wrong parameter verification ([8180e9c](https://github.com/ApsarasX/llvm-bindings/commit/8180e9cd35d29ffa02572870e890b118cb941699))
+
+
+### Features
+
+* **IR/GlobalVariable:** add setInitializer method ([a11ad4c](https://github.com/ApsarasX/llvm-bindings/commit/a11ad4c5b86fe3efbbbfde9328e1f3baaa85d927))
+
+
+
+## [0.4.1](https://github.com/ApsarasX/llvm-bindings/compare/v0.4.0...v0.4.1) (2022-07-22)
+
+
+### Bug Fixes
+
+* **ConstantArray:** fix ConstantArray::get() to check for the right type ([#19](https://github.com/ApsarasX/llvm-bindings/pull/19))([99a52fe](https://github.com/ApsarasX/llvm-bindings/commit/99a52fe64050154b658001f8c0e3e3a3b4a99454))
+
+
+
+## [0.4.0](https://github.com/ApsarasX/llvm-bindings/compare/v0.3.8...v0.4.0) (2022-06-27)
+
+
+### Features
+
+* switch the version of llvm to 14 ([c08080a](https://github.com/ApsarasX/llvm-bindings/commit/c08080a388b163b8e2acb1a97195bb566b362dfc))
+
+
+
+## [0.3.8](https://github.com/ApsarasX/llvm-bindings/compare/v0.3.7...v0.3.8) (2022-06-06)
+
+
+### Features
+
+* **ConstantArray:** add class ConstantArray and some of its methods ([3b609cb](https://github.com/ApsarasX/llvm-bindings/commit/3b609cb2f1d98b5fd92ab3392d193363f6a1a2d7))
+* **ConstantDataArray:** add class ConstantDataArray and some of its methods ([2f360f2](https://github.com/ApsarasX/llvm-bindings/commit/2f360f2aed8f1f75bfb60a9d29ac13f10e659bbe))
+
+
+
+## [0.3.7](https://github.com/ApsarasX/llvm-bindings/compare/v0.3.6...v0.3.7) (2022-04-27)
+
+
+### Features
+
+* **StructType:** add missing methods for StructType ([#15](https://github.com/ApsarasX/llvm-bindings/issues/15)) ([b76c918](https://github.com/ApsarasX/llvm-bindings/commit/b76c918bd6b960e04762a7e092f053fed97c0599))
+
+
+
 ## [0.3.6](https://github.com/ApsarasX/llvm-bindings/compare/v0.3.5...v0.3.6) (2022-03-16)
 
 

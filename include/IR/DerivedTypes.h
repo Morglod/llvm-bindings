@@ -113,7 +113,7 @@ private:
     void setBody(const Napi::CallbackInfo &info);
 
     void setName(const Napi::CallbackInfo &info);
-    
+
     Napi::Value hasName(const Napi::CallbackInfo &info);
     
     Napi::Value getName(const Napi::CallbackInfo &info);
@@ -217,8 +217,6 @@ private:
     static Napi::Value get(const Napi::CallbackInfo &info);
 
     static Napi::Value getUnqual(const Napi::CallbackInfo &info);
-
-    Napi::Value getElementType(const Napi::CallbackInfo &info);
 
     Napi::Value isPointerTy(const Napi::CallbackInfo &info);
 

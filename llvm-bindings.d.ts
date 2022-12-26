@@ -96,6 +96,95 @@ declare namespace llvm {
         public constructor();
     }
 
+    class Attribute {
+        public static readonly AttrKind: {
+            AlwaysInline: number;
+            ArgMemOnly: number;
+            Builtin: number;
+            Cold: number;
+            Convergent: number;
+            DisableSanitizerInstrumentation: number;
+            Hot: number;
+            ImmArg: number;
+            InReg: number;
+            InaccessibleMemOnly: number;
+            InaccessibleMemOrArgMemOnly: number;
+            InlineHint: number;
+            JumpTable: number;
+            MinSize: number;
+            MustProgress: number;
+            Naked: number;
+            Nest: number;
+            NoAlias: number;
+            NoBuiltin: number;
+            NoCallback: number;
+            NoCapture: number;
+            NoCfCheck: number;
+            NoDuplicate: number;
+            NoFree: number;
+            NoImplicitFloat: number;
+            NoInline: number;
+            NoMerge: number;
+            NoProfile: number;
+            NoRecurse: number;
+            NoRedZone: number;
+            NoReturn: number;
+            NoSanitizeCoverage: number;
+            NoSync: number;
+            NoUndef: number;
+            NoUnwind: number;
+            NonLazyBind: number;
+            NonNull: number;
+            NullPointerIsValid: number;
+            OptForFuzzing: number;
+            OptimizeForSize: number;
+            OptimizeNone: number;
+            ReadNone: number;
+            ReadOnly: number;
+            Returned: number;
+            ReturnsTwice: number;
+            SExt: number;
+            SafeStack: number;
+            SanitizeAddress: number;
+            SanitizeHWAddress: number;
+            SanitizeMemTag: number;
+            SanitizeMemory: number;
+            SanitizeThread: number;
+            ShadowCallStack: number;
+            Speculatable: number;
+            SpeculativeLoadHardening: number;
+            StackProtect: number;
+            StackProtectReq: number;
+            StackProtectStrong: number;
+            StrictFP: number;
+            SwiftAsync: number;
+            SwiftError: number;
+            SwiftSelf: number;
+            UWTable: number;
+            WillReturn: number;
+            WriteOnly: number;
+            LastEnumAttr: number;
+            ByRef: number;
+            ByVal: number;
+            ElementType: number;
+            InAlloca: number;
+            Preallocated: number;
+            LastTypeAttr: number;
+            Alignment: number;
+            AllocSize: number;
+            Dereferenceable: number;
+            DereferenceableOrNull: number;
+            StackAlignment: number;
+            VScaleRange: number;
+        };
+
+        public static get(context: LLVMContext, kind: number, value?: number): Attribute;
+        public static get(context: LLVMContext, kind: string, value?: string): Attribute;
+        public static get(context: LLVMContext, kind: number, type: Type): Attribute;
+
+        protected constructor();
+    }
+
     class Module {
         public static readonly ModFlagBehavior: {
             Error: number;
@@ -335,6 +424,7 @@ declare namespace llvm {
     class StructType extends Type {
         public static create(context: LLVMContext, name: string): StructType;
         public static create(context: LLVMContext, elementTypes: Type[], name: string): StructType;
+        public static create(context: LLVMContext, elementTypes: Type[], name: string, isPacked?: boolean): StructType;
 
         public static get(context: LLVMContext): StructType;
         public static get(context: LLVMContext, elementTypes: Type[]): StructType;
@@ -344,11 +434,15 @@ declare namespace llvm {
         public setBody(elementTypes: Type[]): void;
 
         public setName(name: string): void;
+
         public hasName(): boolean;
+
         public getName(): string;
 
         public isOpaque(): boolean;
+
         public isPacked(): boolean;
+
         public isLiteral(): boolean;
 
         // duplicated
@@ -407,8 +501,6 @@ declare namespace llvm {
         public static get(elementType: Type, addrSpace: number): PointerType;
 
         public static getUnqual(elementType: Type): PointerType;
-
-        public getElementType(): Type;
 
         // duplicated
         public isPointerTy(): boolean;
@@ -543,7 +635,6 @@ declare namespace llvm {
 
         public static getFalse(context: LLVMContext): ConstantInt;
 
-        // duplicated
         public getType(): IntegerType;
 
         protected constructor();
@@ -563,10 +654,17 @@ declare namespace llvm {
         protected constructor();
     }
 
+    class ConstantArray extends Constant {
+        public static get(type: ArrayType, values: Constant[]): Constant;
+
+        public getType(): ArrayType;
+
+        protected constructor();
+    }
+
     class ConstantStruct extends Constant {
         public static get(type: StructType, values: Constant[]): Constant;
 
-        // duplicated
         public getType(): StructType;
 
         protected constructor();
@@ -576,6 +674,16 @@ declare namespace llvm {
         public static get(type: PointerType): ConstantPointerNull;
 
         public getType(): PointerType;
+
+        protected constructor();
+    }
+
+    class ConstantDataArray extends Constant {
+        public static get(context: LLVMContext, elements: number[]): Constant;
+
+        public static getString(context: LLVMContext, initializer: string, addNull?: boolean): Constant;
+
+        public getType(): ArrayType;
 
         protected constructor();
     }
@@ -648,6 +756,8 @@ declare namespace llvm {
         // duplicated
         public getValueType(): Type;
 
+        public setInitializer(initVal: Constant | null): void;
+
         public removeFromParent(): void;
 
         public eraseFromParent(): void;
@@ -703,10 +813,143 @@ declare namespace llvm {
 
         public getSubprogram(): DISubprogram;
 
+        public getCallingConv(): number;
+
+        public setCallingConv(cc: number): void;
+
         // duplicated
         public getType(): PointerType;
 
+        public addFnAttr(kind: number): void;
+        public addFnAttr(attr: Attribute): void;
+
+        public addParamAttr(argNo: number, kind: number): void;
+        public addParamAttr(argNo: number, attr: Attribute): void;
+
+        public addRetAttr(kind: number): void;
+        public addRetAttr(attr: Attribute): void;
+
         protected constructor();
+    }
+
+    enum CallingConv {
+        C = 0,
+        Fast = 8,
+        Cold = 9,
+        GHC = 10,
+        HiPE = 11,
+        WebKit_JS = 12,
+        AnyReg = 13,
+        PreserveMost = 14,
+        PreserveAll = 15,
+        Swift = 16,
+        CXX_FAST_TLS = 17,
+        Tail = 18,
+        CFGuard_Check = 19,
+        SwiftTail = 20,
+        FirstTargetCC = 64,
+        X86_StdCall = 64,
+        X86_FastCall = 65,
+        ARM_APCS = 66,
+        ARM_AAPCS = 67,
+        ARM_AAPCS_VFP = 68,
+        MSP430_INTR = 69,
+        X86_ThisCall = 70,
+        PTX_Kernel = 71,
+        PTX_Device = 72,
+        SPIR_FUNC = 75,
+        SPIR_KERNEL = 76,
+        Intel_OCL_BI = 77,
+        X86_64_SysV = 78,
+        Win64 = 79,
+        X86_VectorCall = 80,
+        HHVM = 81,
+        HHVM_C = 82,
+        X86_INTR = 83,
+        AVR_INTR = 84,
+        AVR_SIGNAL = 85,
+        AVR_BUILTIN = 86,
+        AMDGPU_VS = 87,
+        AMDGPU_GS = 88,
+        AMDGPU_PS = 89,
+        AMDGPU_CS = 90,
+        AMDGPU_KERNEL = 91,
+        X86_RegCall = 92,
+        AMDGPU_HS = 93,
+        MSP430_BUILTIN = 94,
+        AMDGPU_LS = 95,
+        AMDGPU_ES = 96,
+        AArch64_VectorCall = 97,
+        AArch64_SVE_VectorCall = 98,
+        WASM_EmscriptenInvoke = 99,
+        AMDGPU_Gfx = 100,
+        M68k_INTR = 101,
+    }
+
+    enum Reloc {
+        Static = 0,
+        PIC_ = 1,
+        DynamicNoPIC = 2,
+        ROPI = 3,
+        RWPI = 4,
+        ROPI_RWPI = 5,
+    }
+
+    enum CodeModel {
+        Tiny = 0,
+        Small = 1,
+        Kernel = 2,
+        Medium = 3,
+        Large = 4,
+    }
+
+    enum PICLevel {
+        NotPIC = 0,
+        SmallPIC = 1,
+        BigPIC = 2,
+    }
+
+    enum PIELevel {
+        Default = 0,
+        Small = 1,
+        Large = 2,
+    }
+
+    enum TLSModel {
+       GeneralDynamic = 0,
+       LocalDynamic = 1,
+       InitialExec = 2,
+       LocalExec = 3,
+    }
+
+    enum CodeGenOpt {
+        None = 0,
+        Less = 1,
+        Default = 2,
+        Aggressive = 3,
+    }
+
+    enum CodeGenFileType {
+        Assembly = 0,
+        Object = 1,
+        Null = 2,
+    }
+
+    enum OptimizationLevel {
+        O0,
+        O1,
+        O2,
+        O3,
+        Os,
+        Oz,
+    }
+
+    enum ThinOrFullLTOPhase {
+        None,
+        ThinLTOPreLink,
+        ThinLTOPostLink,
+        FullLTOPreLink,
+        FullLTOPostLink
     }
 
     class Instruction extends User {
@@ -1534,7 +1777,7 @@ declare namespace llvm {
 
         public CreateIsNotNull(value: Value, name?: string): Value;
 
-        public CreatePtrDiff(lhs: Value, rhs: Value, name?: string): Value;
+        public CreatePtrDiff(elemType: Type, lhs: Value, rhs: Value, name?: string): Value;
     }
 
     namespace IRBuilder {
@@ -1748,6 +1991,8 @@ declare namespace llvm {
         const addressofreturnaddress: number;
         const adjust_trampoline: number;
         const annotation: number;
+        const arithmetic_fence: number;
+        const asan_check_memaccess: number;
         const assume: number;
         const bitreverse: number;
         const bswap: number;
@@ -1761,6 +2006,7 @@ declare namespace llvm {
         const convert_from_fp16: number;
         const convert_to_fp16: number;
         const copysign: number;
+        const coro_align: number;
         const coro_alloc: number;
         const coro_alloca_alloc: number;
         const coro_alloca_free: number;
@@ -1768,6 +2014,7 @@ declare namespace llvm {
         const coro_async_context_alloc: number;
         const coro_async_context_dealloc: number;
         const coro_async_resume: number;
+        const coro_async_size_replace: number;
         const coro_begin: number;
         const coro_destroy: number;
         const coro_done: number;
@@ -1780,7 +2027,6 @@ declare namespace llvm {
         const coro_id_retcon: number;
         const coro_id_retcon_once: number;
         const coro_noop: number;
-        const coro_param: number;
         const coro_prepare_async: number;
         const coro_prepare_retcon: number;
         const coro_promise: number;
@@ -1838,6 +2084,7 @@ declare namespace llvm {
         const hwasan_check_memaccess_shortgranules: number;
         const icall_branch_funnel: number;
         const init_trampoline: number;
+        const instrprof_cover: number;
         const instrprof_increment: number;
         const instrprof_increment_step: number;
         const instrprof_value_profile: number;
@@ -1890,6 +2137,7 @@ declare namespace llvm {
         const objc_autoreleasePoolPop: number;
         const objc_autoreleasePoolPush: number;
         const objc_autoreleaseReturnValue: number;
+        const objc_clang_arc_noop_use: number;
         const objc_clang_arc_use: number;
         const objc_copyWeak: number;
         const objc_destroyWeak: number;
@@ -1922,6 +2170,12 @@ declare namespace llvm {
         const preserve_union_access_index: number;
         const pseudoprobe: number;
         const ptr_annotation: number;
+        const ptrauth_auth: number;
+        const ptrauth_blend: number;
+        const ptrauth_resign: number;
+        const ptrauth_sign: number;
+        const ptrauth_sign_generic: number;
+        const ptrauth_strip: number;
         const ptrmask: number;
         const read_register: number;
         const read_volatile_register: number;
@@ -1934,7 +2188,12 @@ declare namespace llvm {
         const sadd_with_overflow: number;
         const sdiv_fix: number;
         const sdiv_fix_sat: number;
+        const seh_scope_begin: number;
+        const seh_scope_end: number;
+        const seh_try_begin: number;
+        const seh_try_end: number;
         const set_loop_iterations: number;
+        const set_rounding: number;
         const sideeffect: number;
         const sin: number;
         const smax: number;
@@ -1954,7 +2213,9 @@ declare namespace llvm {
         const stacksave: number;
         const start_loop_iterations: number;
         const strip_invariant_group: number;
+        const swift_async_context_addr: number;
         const test_set_loop_iterations: number;
+        const test_start_loop_iterations: number;
         const thread_pointer: number;
         const trap: number;
         const trunc: number;
@@ -1993,12 +2254,36 @@ declare namespace llvm {
         const vp_add: number;
         const vp_and: number;
         const vp_ashr: number;
+        const vp_fadd: number;
+        const vp_fdiv: number;
+        const vp_fmul: number;
+        const vp_frem: number;
+        const vp_fsub: number;
+        const vp_gather: number;
+        const vp_load: number;
         const vp_lshr: number;
+        const vp_merge: number;
         const vp_mul: number;
         const vp_or: number;
+        const vp_reduce_add: number;
+        const vp_reduce_and: number;
+        const vp_reduce_fadd: number;
+        const vp_reduce_fmax: number;
+        const vp_reduce_fmin: number;
+        const vp_reduce_fmul: number;
+        const vp_reduce_mul: number;
+        const vp_reduce_or: number;
+        const vp_reduce_smax: number;
+        const vp_reduce_smin: number;
+        const vp_reduce_umax: number;
+        const vp_reduce_umin: number;
+        const vp_reduce_xor: number;
+        const vp_scatter: number;
         const vp_sdiv: number;
+        const vp_select: number;
         const vp_shl: number;
         const vp_srem: number;
+        const vp_store: number;
         const vp_sub: number;
         const vp_udiv: number;
         const vp_urem: number;
@@ -2021,12 +2306,11 @@ declare namespace llvm {
         public static linkModules(destModule: Module, srcModule: Module): boolean;
     }
 
-    class SMDiagnostic {
-        public constructor();
-    }
-
     class Target {
         public createTargetMachine(targetTriple: string, cpu: string, features?: string): TargetMachine;
+        public createTargetMachine(targetTriple: string, cpu: string, features: string, reloc: Reloc): TargetMachine;
+        public createTargetMachine(targetTriple: string, cpu: string, features: string, reloc: Reloc, codeModel: CodeModel): TargetMachine;
+        public createTargetMachine(targetTriple: string, cpu: string, features: string, reloc: Reloc, codeModel: CodeModel, codeGenOpt: CodeGenOpt): TargetMachine;
 
         public getName(): string;
 
@@ -2041,10 +2325,33 @@ declare namespace llvm {
         protected constructor();
     }
 
+    class SMDiagnostic {
+        public constructor();
+    }
+
     class TargetMachine {
         public createDataLayout(): DataLayout;
+        public emitToFile(module: Module, path: string, format: CodeGenFileType): void;
+        public emitToBuffer(module: Module, format: CodeGenFileType): Buffer;
 
         protected constructor();
+    }
+
+    class FunctionPassManager {
+        constructor();
+
+        addSROAPass(): void;
+        addEarlyCSEPass(useSSA?: boolean): void;
+        addInstCombinePass(): void;
+    }
+
+    class ModulePassManager {
+        constructor(level: OptimizationLevel);
+
+        createFunctionPassManager(lto: ThinOrFullLTOPhase): FunctionPassManager;
+        addFunctionPasses(fpm: FunctionPassManager): void;
+        addVerifierPass(): void;
+        run(module: Module): void;
     }
 
     function InitializeAllTargetInfos(): void;

@@ -7,6 +7,7 @@
 #include "IR/DerivedTypes.h"
 #include "IR/Value.h"
 #include "IR/Argument.h"
+#include "IR/Attributes.h"
 #include "IR/BasicBlock.h"
 #include "IR/User.h"
 #include "IR/Constant.h"
@@ -15,6 +16,7 @@
 #include "IR/GlobalObject.h"
 #include "IR/GlobalVariable.h"
 #include "IR/Function.h"
+#include "IR/CallingConv.h"
 #include "IR/Instruction.h"
 #include "IR/Instructions.h"
 #include "IR/IRBuilder.h"
@@ -25,5 +27,6 @@
 #include "IR/DataLayout.h"
 #include "IR/Verifier.h"
 #include "IR/Intrinsic.h"
+#include "IR/PassManager.h"
 
 void InitIR(Napi::Env env, Napi::Object &exports);

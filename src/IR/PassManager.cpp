@@ -141,7 +141,7 @@ void ModulePassManager::run(const Napi::CallbackInfo &info) {
     if (!module) {
         throw Napi::TypeError::New(env, ErrMsg::Class::ModulePassManager::run);
     }
-
+   
     passManager->run(*module, *moduleAnalysisManager);
 }
 

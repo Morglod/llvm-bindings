@@ -89,7 +89,11 @@ void FunctionType::Init(Napi::Env env, Napi::Object &exports) {
     Napi::Function func = DefineClass(env, "FunctionType", {
             StaticMethod("get", &FunctionType::get),
             InstanceMethod("isVoidTy", &FunctionType::isVoidTy),
-            InstanceMethod("getTypeID", &FunctionType::getTypeID)
+            InstanceMethod("getTypeID", &FunctionType::getTypeID),
+            InstanceMethod("getReturnType", &FunctionType::getReturnType),
+            InstanceMethod("getParamType", &FunctionType::getParamType),
+            InstanceMethod("isVarArg", &FunctionType::isVarArg),
+            InstanceMethod("getNumParams", &FunctionType::getNumParams)
     });
     constructor = Napi::Persistent(func);
     constructor.SuppressDestruct();
@@ -155,6 +159,23 @@ Napi::Value FunctionType::isVoidTy(const Napi::CallbackInfo &info) {
 
 Napi::Value FunctionType::getTypeID(const Napi::CallbackInfo &info) {
     return Napi::Number::New(info.Env(), functionType->getTypeID());
+}
+
+Napi::Value FunctionType::getReturnType(const Napi::CallbackInfo &info) {
+    return Type::New(info.Env(), functionType->getReturnType());
+}
+
+Napi::Value FunctionType::getParamType(const Napi::CallbackInfo &info) {
+    unsigned paramIndex = info[0].As<Napi::Number>();
+    return Type::New(info.Env(), functionType->getParamType(paramIndex));
+}
+
+Napi::Value FunctionType::isVarArg(const Napi::CallbackInfo &info) {
+    return Napi::Boolean::New(info.Env(), functionType->isVarArg());
+}
+
+Napi::Value FunctionType::getNumParams(const Napi::CallbackInfo &info) {
+    return Napi::Number::New(info.Env(), functionType->getNumParams());
 }
 
 //===----------------------------------------------------------------------===//
@@ -232,7 +253,9 @@ void StructType::Init(Napi::Env env, Napi::Object &exports) {
             InstanceMethod("isStructTy", &StructType::isStructTy),
             InstanceMethod("isIntegerTy", &StructType::isIntegerTy),
             InstanceMethod("isVoidTy", &StructType::isVoidTy),
-            InstanceMethod("getTypeID", &StructType::getTypeID)
+            InstanceMethod("getTypeID", &StructType::getTypeID),
+            InstanceMethod("getNumElements", &StructType::getNumElements),
+            InstanceMethod("getElementType", &StructType::getElementType)
     });
     constructor = Napi::Persistent(func);
     constructor.SuppressDestruct();
@@ -426,6 +449,15 @@ Napi::Value StructType::isVoidTy(const Napi::CallbackInfo &info) {
 
 Napi::Value StructType::getTypeID(const Napi::CallbackInfo &info) {
     return Napi::Number::New(info.Env(), structType->getTypeID());
+}
+
+Napi::Value StructType::getNumElements(const Napi::CallbackInfo &info) {
+    return Napi::Number::New(info.Env(), structType->getNumElements());
+}
+
+Napi::Value StructType::getElementType(const Napi::CallbackInfo &info) {
+    unsigned index = info[0].As<Napi::Number>();
+    return Type::New(info.Env(), structType->getElementType(index));
 }
 
 //===----------------------------------------------------------------------===//

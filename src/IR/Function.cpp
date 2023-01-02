@@ -25,6 +25,7 @@ void Function::Init(Napi::Env env, Napi::Object &exports) {
             InstanceMethod("setSubprogram", &Function::setSubprogram),
             InstanceMethod("getSubprogram", &Function::getSubprogram),
             InstanceMethod("getType", &Function::getType),
+            InstanceMethod("getFunctionType", &Function::getFunctionType),
             InstanceMethod("getCallingConv", &Function::getCallingConv),
             InstanceMethod("setCallingConv", &Function::setCallingConv),
             InstanceMethod("getType", &Function::getType),
@@ -199,6 +200,11 @@ Napi::Value Function::getType(const Napi::CallbackInfo &info) {
     Napi::Env env = info.Env();
     llvm::PointerType *type = function->getType();
     return PointerType::New(env, type);
+}
+
+Napi::Value Function::getFunctionType(const Napi::CallbackInfo &info) {
+    Napi::Env env = info.Env();
+    return FunctionType::New(env, function->getFunctionType());
 }
 
 Napi::Value Function::getCallingConv(const Napi::CallbackInfo &info)

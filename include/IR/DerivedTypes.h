@@ -57,6 +57,11 @@ private:
     Napi::Value isVoidTy(const Napi::CallbackInfo &info);
 
     Napi::Value getTypeID(const Napi::CallbackInfo &info);
+
+    Napi::Value getReturnType(const Napi::CallbackInfo &info);
+    Napi::Value getParamType(const Napi::CallbackInfo &info);
+    Napi::Value isVarArg(const Napi::CallbackInfo &info);
+    Napi::Value getNumParams(const Napi::CallbackInfo &info);
 };
 
 class FunctionCallee : public Napi::ObjectWrap<FunctionCallee> {
@@ -133,6 +138,10 @@ private:
     Napi::Value isVoidTy(const Napi::CallbackInfo &info);
 
     Napi::Value getTypeID(const Napi::CallbackInfo &info);
+
+    Napi::Value getNumElements(const Napi::CallbackInfo &info);
+
+    Napi::Value getElementType(const Napi::CallbackInfo &info);
 };
 
 class ArrayType : public Napi::ObjectWrap<ArrayType> {

@@ -196,7 +196,7 @@ declare namespace llvm {
             Max: number;
             ModFlagBehaviorFirstVal: number;
             ModFlagBehaviorLastVal: number;
-        }
+        };
 
         public constructor(moduleID: string, context: LLVMContext);
 
@@ -404,6 +404,11 @@ declare namespace llvm {
         public static get(returnType: Type, isVarArg: boolean): FunctionType;
         public static get(returnType: Type, paramTypes: Type[], isVarArg: boolean): FunctionType;
 
+        getReturnType(): Type;
+        getParamType(index: number): Type;
+        isVarArg(): boolean;
+        getNumParams(): number;
+
         // duplicated
         public isVoidTy(): boolean;
 
@@ -429,7 +434,11 @@ declare namespace llvm {
         public static get(context: LLVMContext): StructType;
         public static get(context: LLVMContext, elementTypes: Type[]): StructType;
 
-        public getTypeByName(name: string): StructType | null;
+        public static getTypeByName(name: string): StructType | null;
+
+        public getNumElements(): number;
+
+        public getElementType(index: number): Type;
 
         public setBody(elementTypes: Type[]): void;
 
@@ -646,7 +655,7 @@ declare namespace llvm {
         public static get(type: Type, value: string): Constant;
         public static get(context: LLVMContext, value: APFloat): ConstantFP;
 
-        public static getNaN(type: Type): Constant
+        public static getNaN(type: Type): Constant;
 
         // duplicated
         public getType(): Type;
@@ -724,7 +733,7 @@ declare namespace llvm {
             DefaultVisibility: number;
             HiddenVisibility: number;
             ProtectedVisibility: number;
-        }
+        };
 
         // duplicated
         public getType(): PointerType;
@@ -746,9 +755,22 @@ declare namespace llvm {
 
     class GlobalVariable extends GlobalObject {
         // customized
-        public constructor(type: Type, isConstant: boolean, linkage: number, initializer?: Constant | null, name?: string);
+        public constructor(
+            type: Type,
+            isConstant: boolean,
+            linkage: number,
+            initializer?: Constant | null,
+            name?: string
+        );
         // customized
-        public constructor(module: Module, type: Type, isConstant: boolean, linkage: number, initializer: Constant | null, name?: string);
+        public constructor(
+            module: Module,
+            type: Type,
+            isConstant: boolean,
+            linkage: number,
+            initializer: Constant | null,
+            name?: string
+        );
 
         // duplicated
         public getType(): PointerType;
@@ -773,6 +795,8 @@ declare namespace llvm {
         public getArg(i: number): Argument;
 
         public getReturnType(): Type;
+
+        public getFunctionType(): FunctionType;
 
         // customized
         public addBasicBlock(basicBlock: BasicBlock): void;
@@ -916,10 +940,10 @@ declare namespace llvm {
     }
 
     enum TLSModel {
-       GeneralDynamic = 0,
-       LocalDynamic = 1,
-       InitialExec = 2,
-       LocalExec = 3,
+        GeneralDynamic = 0,
+        LocalDynamic = 1,
+        InitialExec = 2,
+        LocalExec = 3,
     }
 
     enum CodeGenOpt {
@@ -949,7 +973,7 @@ declare namespace llvm {
         ThinLTOPreLink,
         ThinLTOPostLink,
         FullLTOPreLink,
-        FullLTOPostLink
+        FullLTOPostLink,
     }
 
     class Instruction extends User {
@@ -1571,12 +1595,47 @@ declare namespace llvm {
         public CreateIndirectBr(addr: Value, numDests?: number): IndirectBrInst;
 
         // customized
-        public CreateInvoke(callee: Function, normalDest: BasicBlock, unwindDest: BasicBlock, name?: string): InvokeInst;
-        public CreateInvoke(callee: Function, normalDest: BasicBlock, unwindDest: BasicBlock, args: Value[], name?: string): InvokeInst;
-        public CreateInvoke(callee: FunctionCallee, normalDest: BasicBlock, unwindDest: BasicBlock, name?: string): InvokeInst;
-        public CreateInvoke(callee: FunctionCallee, normalDest: BasicBlock, unwindDest: BasicBlock, args: Value[], name?: string): InvokeInst;
-        public CreateInvoke(funcType: FunctionType, callee: Function, normalDest: BasicBlock, unwindDest: BasicBlock, name?: string): InvokeInst;
-        public CreateInvoke(funcType: FunctionType, callee: Function, normalDest: BasicBlock, unwindDest: BasicBlock, args: Value[], name?: string): InvokeInst;
+        public CreateInvoke(
+            callee: Function,
+            normalDest: BasicBlock,
+            unwindDest: BasicBlock,
+            name?: string
+        ): InvokeInst;
+        public CreateInvoke(
+            callee: Function,
+            normalDest: BasicBlock,
+            unwindDest: BasicBlock,
+            args: Value[],
+            name?: string
+        ): InvokeInst;
+        public CreateInvoke(
+            callee: FunctionCallee,
+            normalDest: BasicBlock,
+            unwindDest: BasicBlock,
+            name?: string
+        ): InvokeInst;
+        public CreateInvoke(
+            callee: FunctionCallee,
+            normalDest: BasicBlock,
+            unwindDest: BasicBlock,
+            args: Value[],
+            name?: string
+        ): InvokeInst;
+        public CreateInvoke(
+            funcType: FunctionType,
+            callee: Function,
+            normalDest: BasicBlock,
+            unwindDest: BasicBlock,
+            name?: string
+        ): InvokeInst;
+        public CreateInvoke(
+            funcType: FunctionType,
+            callee: Function,
+            normalDest: BasicBlock,
+            unwindDest: BasicBlock,
+            args: Value[],
+            name?: string
+        ): InvokeInst;
 
         public CreateResume(exn: Value): ResumeInst;
 
@@ -1627,7 +1686,6 @@ declare namespace llvm {
         public CreateFNeg(value: Value, name?: string): Value;
 
         public CreateNot(value: Value, name?: string): Value;
-
 
         //===--------------------------------------------------------------------===//
         // Instruction creation methods: Memory Instructions
@@ -1746,7 +1804,6 @@ declare namespace llvm {
 
         public CreateFCmpULT(lhs: Value, rhs: Value, name?: string): Value;
 
-
         //===--------------------------------------------------------------------===//
         // Instruction creation methods: Other Instructions
         //===--------------------------------------------------------------------===//
@@ -1839,7 +1896,7 @@ declare namespace llvm {
             FlagIndirectVirtualBase: number;
             FlagAccessibility: number;
             FlagPtrToMemberRep: number;
-        }
+        };
 
         protected constructor();
     }
@@ -1905,7 +1962,7 @@ declare namespace llvm {
             SPFlagObjCDirect: number;
             SPFlagNonvirtual: number;
             SPFlagVirtuality: number;
-        }
+        };
 
         protected constructor();
     }
@@ -1943,9 +2000,26 @@ declare namespace llvm {
 
         public createFile(filename: string, directory: string): DIFile;
 
-        public createCompileUnit(lang: number, file: DIFile, producer: string, isOptimized: boolean, flags: string, rv: number): DICompileUnit;
+        public createCompileUnit(
+            lang: number,
+            file: DIFile,
+            producer: string,
+            isOptimized: boolean,
+            flags: string,
+            rv: number
+        ): DICompileUnit;
 
-        public createFunction(scope: DIScope, name: string, linkage: string, file: DIFile, line: number, type: DISubroutineType, scopeLine: number, flags: number, spFlags: number): DISubprogram;
+        public createFunction(
+            scope: DIScope,
+            name: string,
+            linkage: string,
+            file: DIFile,
+            line: number,
+            type: DISubroutineType,
+            scopeLine: number,
+            flags: number,
+            spFlags: number
+        ): DISubprogram;
 
         public createLexicalBlock(scope: DIScope, file: DIFile, line: number, column: number): DILexicalBlock;
 
@@ -1957,17 +2031,64 @@ declare namespace llvm {
 
         public createExpression(): DIExpression;
 
-        public createParameterVariable(scope: DIScope, name: string, argNo: number, file: DIFile, line: number, type: DIType, alwaysPreserve?: boolean): DILocalVariable;
+        public createParameterVariable(
+            scope: DIScope,
+            name: string,
+            argNo: number,
+            file: DIFile,
+            line: number,
+            type: DIType,
+            alwaysPreserve?: boolean
+        ): DILocalVariable;
 
-        public createAutoVariable(scope: DIScope, name: string, file: DIFile, line: number, type: DIType | null, alwaysPreserve?: boolean): DILocalVariable;
+        public createAutoVariable(
+            scope: DIScope,
+            name: string,
+            file: DIFile,
+            line: number,
+            type: DIType | null,
+            alwaysPreserve?: boolean
+        ): DILocalVariable;
 
-        public createGlobalVariableExpression(context: DIScope, name: string, linkage: string, file: DIFile, line: number, type: DIType, IsLocalToUnit: boolean): DIGlobalVariableExpression;
+        public createGlobalVariableExpression(
+            context: DIScope,
+            name: string,
+            linkage: string,
+            file: DIFile,
+            line: number,
+            type: DIType,
+            IsLocalToUnit: boolean
+        ): DIGlobalVariableExpression;
 
-        public insertDeclare(storage: Value, variable: DILocalVariable, expr: DIExpression, location: DILocation, insertBB: BasicBlock): Instruction;
-        public insertDeclare(storage: Value, variable: DILocalVariable, expr: DIExpression, location: DILocation, insertBefore: Instruction): Instruction;
+        public insertDeclare(
+            storage: Value,
+            variable: DILocalVariable,
+            expr: DIExpression,
+            location: DILocation,
+            insertBB: BasicBlock
+        ): Instruction;
+        public insertDeclare(
+            storage: Value,
+            variable: DILocalVariable,
+            expr: DIExpression,
+            location: DILocation,
+            insertBefore: Instruction
+        ): Instruction;
 
-        public insertDbgValueIntrinsic(value: Value, variable: DILocalVariable, expr: DIExpression, location: DILocation, insertBB: BasicBlock): Instruction;
-        public insertDbgValueIntrinsic(value: Value, variable: DILocalVariable, expr: DIExpression, location: DILocation, insertBefore: Instruction): Instruction;
+        public insertDbgValueIntrinsic(
+            value: Value,
+            variable: DILocalVariable,
+            expr: DIExpression,
+            location: DILocation,
+            insertBB: BasicBlock
+        ): Instruction;
+        public insertDbgValueIntrinsic(
+            value: Value,
+            variable: DILocalVariable,
+            expr: DIExpression,
+            location: DILocation,
+            insertBefore: Instruction
+        ): Instruction;
 
         public finalizeSubprogram(subprogram: DISubprogram): void;
 
@@ -2309,8 +2430,21 @@ declare namespace llvm {
     class Target {
         public createTargetMachine(targetTriple: string, cpu: string, features?: string): TargetMachine;
         public createTargetMachine(targetTriple: string, cpu: string, features: string, reloc: Reloc): TargetMachine;
-        public createTargetMachine(targetTriple: string, cpu: string, features: string, reloc: Reloc, codeModel: CodeModel): TargetMachine;
-        public createTargetMachine(targetTriple: string, cpu: string, features: string, reloc: Reloc, codeModel: CodeModel, codeGenOpt: CodeGenOpt): TargetMachine;
+        public createTargetMachine(
+            targetTriple: string,
+            cpu: string,
+            features: string,
+            reloc: Reloc,
+            codeModel: CodeModel
+        ): TargetMachine;
+        public createTargetMachine(
+            targetTriple: string,
+            cpu: string,
+            features: string,
+            reloc: Reloc,
+            codeModel: CodeModel,
+            codeGenOpt: CodeGenOpt
+        ): TargetMachine;
 
         public getName(): string;
 

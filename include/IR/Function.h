@@ -64,6 +64,8 @@ private:
 
     Napi::Value getType(const Napi::CallbackInfo &info);
 
+    Napi::Value getFunctionType(const Napi::CallbackInfo &info);
+
     Napi::Value getCallingConv(const Napi::CallbackInfo &info);
 
     void setCallingConv(const Napi::CallbackInfo &info);

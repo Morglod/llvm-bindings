@@ -378,6 +378,7 @@ declare namespace llvm {
 
         // extra
         public static isSameType(type1: Type, type2: Type): boolean;
+        public static isExactType(type1: Type, type2: Type): boolean;
 
         protected constructor();
     }

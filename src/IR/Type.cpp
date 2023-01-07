@@ -130,7 +130,8 @@ void Type::Init(Napi::Env env, Napi::Object &exports) {
             InstanceMethod("getPointerTo", &Type::getPointerTo),
             InstanceMethod("getPrimitiveSizeInBits", &Type::getPrimitiveSizeInBits),
             InstanceMethod("getPointerElementType", &Type::getPointerElementType),
-            StaticMethod("isSameType", &Type::isSameType)
+            StaticMethod("isSameType", &Type::isSameType),
+            StaticMethod("isExactType", &Type::isExactType)
     });
     constructor = Napi::Persistent(func);
     constructor.SuppressDestruct();
@@ -227,6 +228,9 @@ static bool isSameType(llvm::Type *type1, llvm::Type *type2) {
     if (type1 == nullptr || type2 == nullptr) {
         return type1 == type2;
     }
+    if (type1 && type2 && type1 == type2) {
+        return true;
+    }
     if (type1->getTypeID() != type2->getTypeID()) {
         return false;
     }
@@ -273,6 +277,17 @@ Napi::Value Type::isSameType(const Napi::CallbackInfo &info) {
         llvm::Type *type1 = Type::Extract(info[0]);
         llvm::Type *type2 = Type::Extract(info[1]);
         return Napi::Boolean::New(env, ::isSameType(type1, type2));
+    }
+    throw Napi::TypeError::New(env, ErrMsg::Class::Type::isSameType);
+}
+
+Napi::Value Type::isExactType(const Napi::CallbackInfo &info) {
+    Napi::Env env = info.Env();
+    unsigned argsLen = info.Length();
+    if (argsLen == 2 && Type::IsClassOf(info[0]) && Type::IsClassOf(info[1])) {
+        llvm::Type *type1 = Type::Extract(info[0]);
+        llvm::Type *type2 = Type::Extract(info[1]);
+        return Napi::Boolean::New(env, type1 == type2);
     }
     throw Napi::TypeError::New(env, ErrMsg::Class::Type::isSameType);
 }

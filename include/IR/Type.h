@@ -42,4 +42,5 @@ private:
     Napi::Value getPointerElementType(const Napi::CallbackInfo &info);
 
     static Napi::Value isSameType(const Napi::CallbackInfo &info);
+    static Napi::Value isExactType(const Napi::CallbackInfo &info);
 };

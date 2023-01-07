@@ -316,7 +316,7 @@ Napi::Value IRBuilder::saveAndClearIP(const Napi::CallbackInfo &info) {
 }
 
 void IRBuilder::restoreIP(const Napi::CallbackInfo &info) {
-    if (info.Length() == 1 && InsertPoint::IsClassOf(info[0])) {
+    if (info.Length() == 1) {
         builder->restoreIP(InsertPoint::Extract(info[0]));
     }
     throw Napi::TypeError::New(info.Env(), ErrMsg::Class::IRBuilder::restoreIP);

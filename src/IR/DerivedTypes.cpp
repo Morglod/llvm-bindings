@@ -12,6 +12,7 @@ void IntegerType::Init(Napi::Env env, Napi::Object &exports) {
             InstanceMethod("isStructTy", &IntegerType::isStructTy),
             InstanceMethod("isIntegerTy", &IntegerType::isIntegerTy),
             InstanceMethod("isVoidTy", &IntegerType::isVoidTy),
+            InstanceMethod("isPointerTy", &IntegerType::isPointerTy),
             InstanceMethod("getTypeID", &IntegerType::getTypeID)
     });
     constructor = Napi::Persistent(func);
@@ -74,6 +75,10 @@ Napi::Value IntegerType::isIntegerTy(const Napi::CallbackInfo &info) {
 
 Napi::Value IntegerType::isVoidTy(const Napi::CallbackInfo &info) {
     return Napi::Boolean::New(info.Env(), integerType->isVoidTy());
+}
+
+Napi::Value IntegerType::isPointerTy(const Napi::CallbackInfo &info) {
+    return Napi::Boolean::New(info.Env(), integerType->isPointerTy());
 }
 
 Napi::Value IntegerType::getTypeID(const Napi::CallbackInfo &info) {
@@ -252,6 +257,7 @@ void StructType::Init(Napi::Env env, Napi::Object &exports) {
             InstanceMethod("getPointerTo", &StructType::getPointerTo),
             InstanceMethod("isStructTy", &StructType::isStructTy),
             InstanceMethod("isIntegerTy", &StructType::isIntegerTy),
+            InstanceMethod("isPointerTy", &StructType::isPointerTy),
             InstanceMethod("isVoidTy", &StructType::isVoidTy),
             InstanceMethod("getTypeID", &StructType::getTypeID),
             InstanceMethod("getNumElements", &StructType::getNumElements),
@@ -458,6 +464,10 @@ Napi::Value StructType::getNumElements(const Napi::CallbackInfo &info) {
 Napi::Value StructType::getElementType(const Napi::CallbackInfo &info) {
     unsigned index = info[0].As<Napi::Number>();
     return Type::New(info.Env(), structType->getElementType(index));
+}
+
+Napi::Value StructType::isPointerTy(const Napi::CallbackInfo &info) {
+    return Napi::Boolean::New(info.Env(), structType->isPointerTy());
 }
 
 //===----------------------------------------------------------------------===//

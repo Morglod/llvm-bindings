@@ -28,6 +28,8 @@ private:
 
     Napi::Value isIntegerTy(const Napi::CallbackInfo &info);
 
+    Napi::Value isPointerTy(const Napi::CallbackInfo &info);
+
     Napi::Value isVoidTy(const Napi::CallbackInfo &info);
 
     Napi::Value getTypeID(const Napi::CallbackInfo &info);
@@ -132,6 +134,8 @@ private:
     Napi::Value getPointerTo(const Napi::CallbackInfo &info);
 
     Napi::Value isStructTy(const Napi::CallbackInfo &info);
+
+    Napi::Value isPointerTy(const Napi::CallbackInfo &info);
 
     Napi::Value isIntegerTy(const Napi::CallbackInfo &info);
 
